@@ -1,3 +1,5 @@
+name: /CD Pipeline
+
 on:
   push:
     branches:
@@ -9,12 +11,31 @@ permissions:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
 
+    steps:
+      # 1. Checkout code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # 2. Setup Node (for build/test)
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 3. Install dependencies
+      - name: Install Dependencies
+        run: npm install
+
+      # 4. Run Tests
+      - name: Run Tests
+        run: npm test
+
+      # 5. Use Secret (security demo)
       - name: Use Secret
         run: echo "Secret stored safely"
 
+      # 6. Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
